@@ -1,101 +1,638 @@
-table tr td{
+/* =========================================================================
+   MAccessoris Admin - komponen halaman data
+   Dibuat agar seluruh halaman admin memakai bahasa visual SB Admin 2.
+   ========================================================================= */
+
+:root {
+    --ma-primary: #a5a374;
+    --ma-primary-dark: #83815a;
+    --ma-primary-soft: rgba(165, 163, 116, 0.16);
+}
+
+body {
+    color: #5a5c69;
+}
+
+a {
+    color: var(--ma-primary-dark);
+}
+
+a:hover {
+    color: #6f6d4b;
+    text-decoration: none;
+}
+
+/* Heading halaman & breadcrumb ------------------------------------------ */
+.page-heading h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #3a3b45;
+}
+
+.page-heading p {
+    color: #858796;
+    font-size: 0.9rem;
+}
+
+.page-heading .breadcrumb {
+    font-size: 0.8rem;
+}
+
+.page-heading .breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    color: #b7b9cc;
+}
+
+.page-heading .breadcrumb-item.active {
+    color: #858796;
+}
+
+/* Kartu statistik ------------------------------------------------------- */
+.stat-card {
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.stat-card:hover {
+    color: inherit;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 0.6rem 1.2rem rgba(58, 59, 69, 0.12) !important;
+}
+
+.stat-card .stat-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+}
+
+.stat-card .stat-value {
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+.stat-card .stat-sub {
+    font-size: 0.75rem;
+    color: #858796;
+}
+
+/* Kartu tabel ----------------------------------------------------------- */
+.card-admin {
+    border: 0;
+    border-radius: 0.55rem;
+}
+
+.card-admin > .card-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    background-color: #fff;
+    border-bottom: 1px solid #e3e6f0;
+    border-radius: 0.55rem 0.55rem 0 0;
+}
+
+.card-admin > .card-header h6 {
+    font-size: 0.95rem;
+}
+
+.card-admin > .card-body {
+    padding: 1.25rem;
+}
+
+.admin-toolbar {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.admin-search {
+    position: relative;
+    width: 250px;
+    min-width: 210px;
+}
+
+.admin-search .form-control {
+    width: 100%;
+    height: 38px;
+    padding-left: 2.25rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    background-color: #f8f9fc;
+    border-color: #e3e6f0;
+}
+
+.admin-search .form-control:focus {
+    background-color: #fff;
+    border-color: #cdcbae;
+    box-shadow: 0 0 0 0.2rem var(--ma-primary-soft);
+}
+
+.admin-search i {
+    position: absolute;
+    top: 50%;
+    left: 0.9rem;
+    transform: translateY(-50%);
+    color: #b7b9cc;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.admin-filter {
+    width: 170px;
+    min-width: 170px;
+    height: 38px;
+    flex: 0 0 auto;
+    font-size: 0.82rem;
+    border-radius: 999px;
+    border-color: #e3e6f0;
+    background-color: #f8f9fc;
+    color: #5a5c69;
+    padding: 0 1rem;
+}
+
+.admin-filter:focus {
+    border-color: #cdcbae;
+    box-shadow: 0 0 0 0.2rem var(--ma-primary-soft);
+}
+
+/* Tabel ----------------------------------------------------------------- */
+.table-admin {
+    margin-bottom: 0;
+    color: #5a5c69;
+}
+
+.table-admin thead th {
+    padding: 0.75rem;
+    border-top: 0;
+    border-bottom: 1px solid #e3e6f0;
+    background-color: #f8f9fc;
+    color: #6e707e;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
     vertical-align: middle;
 }
 
-td button{
-    margin: 5px;
+.table-admin tbody td {
+    padding: 0.75rem;
+    border-color: #e3e6f0;
+    vertical-align: middle;
+    font-size: 0.85rem;
 }
 
-td button i{
-    font-size: 20px;
+.table-admin tbody tr {
+    transition: background-color 0.15s ease;
 }
 
-
-.modal-header{
-    background: #0d6efd;
-    color: #fff;
+.table-admin tbody tr:hover {
+    background-color: #f8f9fc;
 }
 
-.modal-body form {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+.table-admin .table-thumb {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 0.4rem;
+    border: 1px solid #e3e6f0;
+    background-color: #f8f9fc;
+}
+
+.table-admin .text-wrap-cell {
+    min-width: 190px;
+    max-width: 320px;
+    white-space: normal;
+}
+
+.table-admin .text-muted-small {
+    display: block;
+    color: #858796;
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+}
+
+.table-actions {
+    white-space: nowrap;
+}
+
+.table-actions .btn {
+    width: 32px;
+    height: 32px;
     padding: 0;
+    margin: 0 2px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    line-height: 30px;
 }
 
-.modal-body form .imgholder{
-    width: 200px;
-    height: 200px;
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
+.table-actions .btn i {
+    font-size: 0.75rem;
 }
 
-.imgholder .upload{
-    position: absolute;
-    bottom: 0;
-    left: 10;
-    width: 100%;
-    height: 100px;
-    background: rgba(0,0,0,0.3);
-    display: none;
+.avatar-circle {
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.upload i{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ma-primary), var(--ma-primary-dark));
     color: #fff;
-    font-size: 35px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
 }
 
-.imgholder:hover .upload{
+.avatar-circle.avatar-muted {
+    background: linear-gradient(135deg, #b7b9cc, #858796);
+}
+
+/* Badge lembut ---------------------------------------------------------- */
+.badge-soft-primary {
+    color: #6f6d4b;
+    background-color: var(--ma-primary-soft);
+}
+
+.badge-soft-success {
+    color: #13855c;
+    background-color: rgba(28, 200, 138, 0.14);
+}
+
+.badge-soft-info {
+    color: #1a8b9c;
+    background-color: rgba(54, 185, 204, 0.14);
+}
+
+.badge-soft-warning {
+    color: #a97a06;
+    background-color: rgba(246, 194, 62, 0.18);
+}
+
+.badge-soft-danger {
+    color: #be2617;
+    background-color: rgba(231, 74, 59, 0.14);
+}
+
+.badge-soft-secondary {
+    color: #5a5c69;
+    background-color: rgba(133, 135, 150, 0.16);
+}
+
+.badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.38em 0.65em;
+    border-radius: 999px;
+}
+
+/* Modal ---------------------------------------------------------------- */
+.modal-header-primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--ma-primary) 0%, var(--ma-primary-dark) 100%);
+    border-bottom: 0;
+    border-radius: 0.35rem 0.35rem 0 0;
+}
+
+.modal-header-primary .modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.modal-header-primary .close {
+    color: #fff;
+    opacity: 0.85;
+    text-shadow: none;
+}
+
+.modal-header-primary .close:hover {
+    opacity: 1;
+}
+
+.modal-content {
+    border: 0;
+    border-radius: 0.45rem;
+}
+
+.modal-footer {
+    border-top: 1px solid #e3e6f0;
+}
+
+.form-label {
+    margin-bottom: 0.35rem;
+    color: #5a5c69;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.form-hint {
+    margin-top: 0.25rem;
+    color: #858796;
+    font-size: 0.72rem;
+}
+
+.form-control {
+    font-size: 0.85rem;
+    color: #5a5c69;
+    border-color: #d1d3e2;
+}
+
+.form-control:focus {
+    border-color: #cdcbae;
+    box-shadow: 0 0 0 0.2rem var(--ma-primary-soft);
+}
+
+select.form-control {
+    height: calc(1.5em + 0.75rem + 2px);
+}
+
+textarea.form-control {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.img-preview {
+    display: block;
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.5rem;
+    background-color: #f8f9fc;
+}
+
+.img-preview-sm {
+    height: 100px;
+}
+
+.custom-file-label {
+    font-size: 0.82rem;
+    color: #858796;
+}
+
+.custom-file-label::after {
+    content: "Pilih";
+}
+
+/* Detail modal --------------------------------------------------------- */
+.detail-list {
+    margin-bottom: 0;
+}
+
+.detail-list dt {
+    color: #858796;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.15rem;
+}
+
+.detail-list dd {
+    margin-bottom: 1rem;
+    color: #3a3b45;
+    font-size: 0.9rem;
+}
+
+.detail-product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid #e3e6f0;
+    background-color: #f8f9fc;
+}
+
+.detail-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ma-primary-dark);
+}
+
+/* Ringkasan transaksi -------------------------------------------------- */
+.order-summary {
+    background-color: #f8f9fc;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.45rem;
+    padding: 0.9rem 1rem;
+}
+
+.order-summary .summary-row {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.22rem 0;
+    font-size: 0.85rem;
 }
 
-.imgholder .upload input{
+.order-summary .summary-row.total {
+    margin-top: 0.5rem;
+    padding-top: 0.65rem;
+    border-top: 1px dashed #d1d3e2;
+    color: #3a3b45;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.order-items-table td,
+.order-items-table th {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
+
+.order-items-table th {
+    border-top: 0;
+    background-color: #f8f9fc;
+    color: #6e707e;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Daftar produk terlaris ----------------------------------------------- */
+.top-product {
+    display: flex;
+    align-items: center;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid #eaecf4;
+}
+
+.top-product:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.top-product img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 0.4rem;
+    border: 1px solid #e3e6f0;
+    margin-right: 0.8rem;
+}
+
+.top-product .top-product-name {
+    color: #3a3b45;
+    font-size: 0.84rem;
+    font-weight: 700;
+    margin-bottom: 0.15rem;
+}
+
+.top-product .top-product-meta {
+    color: #858796;
+    font-size: 0.75rem;
+}
+
+.top-product .progress {
+    height: 5px;
+    margin-top: 0.35rem;
+}
+
+@media (max-width: 767.98px) {
+    .card-admin > .card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .admin-toolbar {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .admin-search,
+    .admin-filter {
+        width: 100%;
+        min-width: 100%;
+    }
+}
+
+/* Empty state ---------------------------------------------------------- */
+/* Saat tabel kosong, header disembunyikan agar pesan kosong tidak melebar
+   mengikuti lebar kolom tabel dan tetap terbaca di layar kecil. */
+.table-admin.table-empty thead {
     display: none;
 }
 
-.modal-body form .inputField{
-    flex-basis: 68%;
-    border-left: 5px groove blue;
-    padding-left: 20px;
+.empty-state {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    color: #858796;
 }
 
-form .inputField > div{
-    width: 100%;
+.empty-state i {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: #dddfeb;
+    font-size: 2.5rem;
+}
+
+.empty-state h6 {
+    margin-bottom: 0.25rem;
+    color: #3a3b45;
+    font-weight: 700;
+}
+
+.empty-state p {
+    font-size: 0.82rem;
+}
+
+/* Toast ---------------------------------------------------------------- */
+.admin-toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1090;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 340px;
+    pointer-events: none;
 }
 
-form .inputField > div label{
-    font-size: 20px;
-    font-weight: 500;
+.admin-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    border-radius: 0.45rem;
+    background-color: #fff;
+    border-left: 4px solid #1cc88a;
+    box-shadow: 0 0.4rem 1rem rgba(58, 59, 69, 0.18);
+    color: #3a3b45;
+    font-size: 0.82rem;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: auto;
 }
 
-#userForm form .inputField > div label::after{
-    content: "*";
-    color: red;
+.admin-toast i {
+    margin-top: 0.1rem;
+    color: #1cc88a;
 }
 
-form .inputField > div input{
-    width: 75%;
-    padding: 10px;
-    border: none;
-    outline: none;
-    background: transparent;
-    border-bottom: 2px solid blue;
+.admin-toast-error {
+    border-left-color: #e74a3b;
 }
 
-.modal-footer .submit{
-    font-size: 18px;
+.admin-toast-error i {
+    color: #e74a3b;
 }
 
+.admin-toast-info {
+    border-left-color: #36b9cc;
+}
 
-#readData form .inputField > div input{
-    color: #000;
-    font-size: 18px;
+.admin-toast-info i {
+    color: #36b9cc;
+}
+
+.admin-toast-warning {
+    border-left-color: #f6c23e;
+}
+
+.admin-toast-warning i {
+    color: #dda20a;
+}
+
+.admin-toast-hide {
+    opacity: 0;
+    transform: translateX(12px);
+}
+
+/* Perbaikan kecil untuk sidebar ---------------------------------------- */
+.sidebar .nav-item .nav-link span {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.sidebar .sidebar-heading {
+    font-size: 0.68rem;
+}
+
+.sidebar .nav-item.active .nav-link {
+    font-weight: 700;
+}
+
+.sidebar .sidebar-brand-text {
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+}
+
+.topbar .nav-link {
+    color: #5a5c69;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.topbar .nav-link:hover {
+    color: var(--ma-primary-dark);
 }

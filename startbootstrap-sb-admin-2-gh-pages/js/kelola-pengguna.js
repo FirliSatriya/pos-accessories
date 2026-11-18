@@ -1,153 +1,291 @@
-var form = document.getElementById("myForm"),
-    imgInput = document.querySelector(".img"),
-    file = document.getElementById("imgInput"),
-    userName = document.getElementById("name"),
-    age = document.getElementById("age"),
-    city = document.getElementById("city"),
-    email = document.getElementById("email"),
-    phone = document.getElementById("phone"),
-    post = document.getElementById("post"),
-    sDate = document.getElementById("sDate"),
-    submitBtn = document.querySelector(".submit"),
-    userInfo = document.getElementById("data"),
-    modal = document.getElementById("userForm"),
-    modalTitle = document.querySelector("#userForm .modal-title"),
-    newUserBtn = document.querySelector(".newUser")
+/* =========================================================================
+   Halaman Data Pengguna
+   ========================================================================= */
+(function (window, document) {
+    'use strict';
 
+    var Admin = window.AdminData;
+    if (!Admin) return;
 
-let getData = localStorage.getItem('userProfile') ? JSON.parse(localStorage.getItem('userProfile')) : []
+    var users = Admin.getUsers().slice();
+    var editingId = null;
 
-let isEdit = false, editId
-showInfo()
+    var tbody = document.getElementById('userTableBody');
+    var tableInfo = document.getElementById('userTableInfo');
+    var searchInput = document.getElementById('userSearch');
+    var form = document.getElementById('userForm');
+    var modal = document.getElementById('userModal');
+    var modalTitle = document.getElementById('userModalLabel');
+    var addButton = document.getElementById('addUserBtn');
 
-newUserBtn.addEventListener('click', ()=> {
-    submitBtn.innerText = 'Submit',
-    modalTitle.innerText = "Fill the Form"
-    isEdit = false
-    imgInput.src = "./image/Profile Icon.webp"
-    form.reset()
-})
+    var fields = {
+        name: document.getElementById('userName'),
+        email: document.getElementById('userEmail'),
+        phone: document.getElementById('userPhone'),
+        address: document.getElementById('userAddress'),
+        status: document.getElementById('userStatus'),
+        password: document.getElementById('userPassword'),
+        passwordHint: document.getElementById('userPasswordHint')
+    };
 
+    var detailIds = {
+        avatar: 'detailUserAvatar',
+        name: 'detailUserName',
+        email: 'detailUserEmail',
+        phone: 'detailUserPhone',
+        address: 'detailUserAddress',
+        status: 'detailUserStatus',
+        created: 'detailUserCreated',
+        id: 'detailUserId'
+    };
 
-file.onchange = function(){
-    if(file.files[0].size < 1000000){  // 1MB = 1000000
-        var fileReader = new FileReader();
+    function showModal(id) {
+        if (window.jQuery) window.jQuery('#' + id).modal('show');
+    }
 
-        fileReader.onload = function(e){
-            imgUrl = e.target.result
-            imgInput.src = imgUrl
+    function hideModal(id) {
+        if (window.jQuery) window.jQuery('#' + id).modal('hide');
+    }
+
+    function findUser(id) {
+        var found = null;
+        users.forEach(function (user) {
+            if (String(user.id) === String(id)) found = user;
+        });
+        return found;
+    }
+
+    function initials(name) {
+        var parts = String(name || '?').trim().split(/\s+/);
+        var first = (parts[0] || '?').charAt(0);
+        var second = parts.length > 1 ? parts[1].charAt(0) : '';
+        return (first + second).toUpperCase();
+    }
+
+    function statusBadge(status) {
+        var value = String(status || 'Aktif');
+        return Admin.badge(value, value === 'Nonaktif' ? 'secondary' : 'success');
+    }
+
+    function filteredUsers() {
+        var term = String(searchInput.value || '').trim().toLowerCase();
+        if (!term) return users;
+
+        return users.filter(function (user) {
+            return [user.name, user.email, user.phone, user.address, user.status]
+                .join(' ')
+                .toLowerCase()
+                .indexOf(term) !== -1;
+        });
+    }
+
+    function renderSummary() {
+        var now = new Date();
+        var newThisMonth = users.filter(function (user) {
+            if (!user.createdAt) return false;
+            var created = new Date(user.createdAt);
+            if (isNaN(created.getTime())) return false;
+            return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+        }).length;
+
+        Admin.setText('userStatTotal', users.length);
+        Admin.setText('userStatActive', users.filter(function (user) {
+            return String(user.status || 'Aktif') !== 'Nonaktif';
+        }).length);
+        Admin.setText('userStatNew', newThisMonth);
+    }
+
+    function render() {
+        var rows = filteredUsers();
+        var table = tbody.closest('table');
+        if (table) table.classList.toggle('table-empty', !rows.length);
+
+        tbody.innerHTML = rows.map(function (user, index) {
+            var muted = String(user.status || 'Aktif') === 'Nonaktif' ? ' avatar-muted' : '';
+            return '<tr data-id="' + Admin.escapeHtml(user.id) + '">' +
+                '<td class="text-center text-muted">' + (index + 1) + '</td>' +
+                '<td class="text-center"><span class="avatar-circle' + muted + '">' +
+                Admin.escapeHtml(initials(user.name)) + '</span></td>' +
+                '<td><strong>' + Admin.escapeHtml(user.name || '-') + '</strong>' +
+                '<span class="text-muted-small">Bergabung ' + Admin.escapeHtml(Admin.formatDate(user.createdAt)) + '</span></td>' +
+                '<td>' + Admin.escapeHtml(user.email || '-') + '</td>' +
+                '<td>' + Admin.escapeHtml(user.phone || '-') + '</td>' +
+                '<td class="text-wrap-cell">' + Admin.escapeHtml(user.address || '-') + '</td>' +
+                '<td>' + Admin.escapeHtml(Admin.formatDate(user.createdAt)) + '</td>' +
+                '<td class="text-center">' + statusBadge(user.status) + '</td>' +
+                '<td class="text-center table-actions">' +
+                '<button type="button" class="btn btn-info" data-action="view" data-id="' + Admin.escapeHtml(user.id) + '" title="Lihat detail"><i class="fas fa-eye"></i></button>' +
+                '<button type="button" class="btn btn-primary" data-action="edit" data-id="' + Admin.escapeHtml(user.id) + '" title="Edit pengguna"><i class="fas fa-pen"></i></button>' +
+                '<button type="button" class="btn btn-danger" data-action="delete" data-id="' + Admin.escapeHtml(user.id) + '" title="Hapus pengguna"><i class="fas fa-trash"></i></button>' +
+                '</td>' +
+                '</tr>';
+        }).join('');
+
+        if (!rows.length) {
+            tbody.innerHTML = '<tr><td colspan="9" class="p-0">' +
+                Admin.emptyState(
+                    'fas fa-users',
+                    users.length ? 'Pengguna tidak ditemukan' : 'Belum ada pengguna',
+                    users.length ? 'Coba kata kunci lain untuk menemukan pengguna.' : 'Tambahkan pengguna pertama melalui tombol di atas.'
+                ) + '</td></tr>';
         }
 
-        fileReader.readAsDataURL(file.files[0])
-    }
-    else{
-        alert("This file is too large!")
-    }
-}
-
-
-function showInfo(){
-    document.querySelectorAll('.employeeDetails').forEach(info => info.remove())
-    getData.forEach((element, index) => {
-        let createElement = `<tr class="employeeDetails">
-            <td>${index+1}</td>
-            <td><img src="${element.picture}" alt="" width="50" height="50"></td>
-            <td>${element.employeeName}</td>
-            <td>${element.employeeAge}</td>
-            <td>${element.employeeCity}</td>
-            <td>${element.employeeEmail}</td>
-            <td>${element.employeePhone}</td>
-            <td>${element.employeePost}</td>
-            <td>${element.startDate}</td>
-
-
-            <td>
-                <button class="btn btn-success" onclick="readInfo('${element.picture}', '${element.employeeName}', '${element.employeeAge}', '${element.employeeCity}', '${element.employeeEmail}', '${element.employeePhone}', '${element.employeePost}', '${element.startDate}')" data-bs-toggle="modal" data-bs-target="#readData"><i class="bi bi-eye"></i></button>
-
-                <button class="btn btn-primary" onclick="editInfo(${index}, '${element.picture}', '${element.employeeName}', '${element.employeeAge}', '${element.employeeCity}', '${element.employeeEmail}', '${element.employeePhone}', '${element.employeePost}', '${element.startDate}')" data-bs-toggle="modal" data-bs-target="#userForm"><i class="bi bi-pencil-square"></i></button>
-
-                <button class="btn btn-danger" onclick="deleteInfo(${index})"><i class="bi bi-trash"></i></button>
-                            
-            </td>
-        </tr>`
-
-        userInfo.innerHTML += createElement
-    })
-}
-showInfo()
-
-
-function readInfo(pic, name, age, city, email, phone, post, sDate){
-    document.querySelector('.showImg').src = pic,
-    document.querySelector('#showName').value = name,
-    document.querySelector("#showAge").value = age,
-    document.querySelector("#showCity").value = city,
-    document.querySelector("#showEmail").value = email,
-    document.querySelector("#showPhone").value = phone,
-    document.querySelector("#showPost").value = post,
-    document.querySelector("#showsDate").value = sDate
-}
-
-
-function editInfo(index, pic, name, Age, City, Email, Phone, Post, Sdate){
-    isEdit = true
-    editId = index
-    imgInput.src = pic
-    userName.value = name
-    age.value = Age
-    city.value =City
-    email.value = Email,
-    phone.value = Phone,
-    post.value = Post,
-    sDate.value = Sdate
-
-    submitBtn.innerText = "Update"
-    modalTitle.innerText = "Update The Form"
-}
-
-
-function deleteInfo(index){
-    if(confirm("Are you sure want to delete?")){
-        getData.splice(index, 1)
-        localStorage.setItem("userProfile", JSON.stringify(getData))
-        showInfo()
-    }
-}
-
-
-form.addEventListener('submit', (e)=> {
-    e.preventDefault()
-
-    const information = {
-        picture: imgInput.src == undefined ? "./image/Profile Icon.webp" : imgInput.src,
-        employeeName: userName.value,
-        employeeAge: age.value,
-        employeeCity: city.value,
-        employeeEmail: email.value,
-        employeePhone: phone.value,
-        employeePost: post.value,
-        startDate: sDate.value
+        tableInfo.textContent = 'Menampilkan ' + rows.length + ' dari ' + users.length + ' pengguna';
+        renderSummary();
     }
 
-    if(!isEdit){
-        getData.push(information)
+    function openAdd() {
+        editingId = null;
+        form.reset();
+        form.classList.remove('was-validated');
+        fields.status.value = 'Aktif';
+        fields.password.required = true;
+        fields.passwordHint.textContent = 'Minimal 6 karakter.';
+        modalTitle.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Tambah Pengguna';
+        showModal(modal.id);
     }
-    else{
-        isEdit = false
-        getData[editId] = information
+
+    function openEdit(id) {
+        var user = findUser(id);
+        if (!user) return;
+
+        editingId = user.id;
+        form.reset();
+        form.classList.remove('was-validated');
+        fields.name.value = user.name || '';
+        fields.email.value = user.email || '';
+        fields.phone.value = user.phone || '';
+        fields.address.value = user.address || '';
+        fields.status.value = user.status || 'Aktif';
+        fields.password.value = '';
+        fields.password.required = false;
+        fields.passwordHint.textContent = 'Biarkan kosong jika kata sandi tidak diubah.';
+        modalTitle.innerHTML = '<i class="fas fa-user-edit mr-2"></i>Edit Pengguna';
+        showModal(modal.id);
     }
 
-    localStorage.setItem('userProfile', JSON.stringify(getData))
+    function openDetail(id) {
+        var user = findUser(id);
+        if (!user) return;
 
-    submitBtn.innerText = "Submit"
-    modalTitle.innerHTML = "Fill The Form"
+        var muted = String(user.status || 'Aktif') === 'Nonaktif' ? ' avatar-muted' : '';
+        var avatar = document.getElementById(detailIds.avatar);
+        if (avatar) {
+            avatar.className = 'avatar-circle' + muted;
+            avatar.textContent = initials(user.name);
+        }
+        Admin.setText(detailIds.name, user.name || '-');
+        Admin.setText(detailIds.email, user.email || '-');
+        Admin.setText(detailIds.phone, user.phone || '-');
+        Admin.setText(detailIds.address, user.address || '-');
+        Admin.setText(detailIds.created, Admin.formatDateTime(user.createdAt));
+        Admin.setText(detailIds.id, user.id || '-');
 
-    showInfo()
+        var status = document.getElementById(detailIds.status);
+        if (status) status.innerHTML = statusBadge(user.status);
 
-    form.reset()
+        showModal('userDetailModal');
+    }
 
-    imgInput.src = "./image/Profile Icon.webp"  
+    function saveUser(event) {
+        event.preventDefault();
+        form.classList.add('was-validated');
 
-    // modal.style.display = "none"
-    // document.querySelector(".modal-backdrop").remove()
-})
+        if (!form.checkValidity()) return;
+
+        var name = fields.name.value.trim();
+        var email = fields.email.value.trim().toLowerCase();
+        var phone = fields.phone.value.trim();
+        var address = fields.address.value.trim();
+        var status = fields.status.value;
+        var password = fields.password.value;
+
+        if (name.length < 2) {
+            Admin.toast('Nama minimal 2 karakter.', 'error');
+            return;
+        }
+
+        if (password && password.length < 6) {
+            Admin.toast('Kata sandi minimal 6 karakter.', 'error');
+            return;
+        }
+
+        var duplicate = users.some(function (user) {
+            return String(user.id) !== String(editingId) &&
+                String(user.email || '').toLowerCase() === email;
+        });
+        if (duplicate) {
+            Admin.toast('Email sudah dipakai oleh pengguna lain.', 'error');
+            return;
+        }
+
+        if (editingId) {
+            users = users.map(function (user) {
+                if (String(user.id) !== String(editingId)) return user;
+                var updated = Object.assign({}, user, {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    status: status
+                });
+                if (password) updated.password = password;
+                return updated;
+            });
+            Admin.toast('Data pengguna berhasil diperbarui.', 'success');
+        } else {
+            users.push({
+                id: Admin.uid('user'),
+                name: name,
+                email: email,
+                password: password,
+                phone: phone,
+                address: address,
+                status: status,
+                createdAt: new Date().toISOString()
+            });
+            Admin.toast('Pengguna baru berhasil ditambahkan.', 'success');
+        }
+
+        Admin.saveUsers(users);
+        hideModal(modal.id);
+        render();
+    }
+
+    function deleteUser(id) {
+        var user = findUser(id);
+        if (!user) return;
+
+        Admin.confirmAction({
+            title: 'Hapus Pengguna',
+            message: 'Hapus akun "' + (user.name || user.email) + '"? Tindakan ini tidak dapat dibatalkan.',
+            confirmText: 'Hapus Pengguna'
+        }, function () {
+            users = users.filter(function (item) {
+                return String(item.id) !== String(id);
+            });
+            Admin.saveUsers(users);
+            render();
+            Admin.toast('Pengguna berhasil dihapus.', 'success');
+        });
+    }
+
+    searchInput.addEventListener('input', render);
+
+    addButton.addEventListener('click', openAdd);
+    form.addEventListener('submit', saveUser);
+
+    tbody.addEventListener('click', function (event) {
+        var button = event.target.closest('button[data-action]');
+        if (!button) return;
+
+        var action = button.getAttribute('data-action');
+        var id = button.getAttribute('data-id');
+
+        if (action === 'view') openDetail(id);
+        if (action === 'edit') openEdit(id);
+        if (action === 'delete') deleteUser(id);
+    });
+
+    render();
+})(window, document);

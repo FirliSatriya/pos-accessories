@@ -47,14 +47,6 @@
                     <div class="our-link">
                         <ul>
                             <li><a href="my-account.html"><i class="fa fa-user s_color"></i>Akun Saya</a></li>
-                            <script>
-                                document.getElementById("akun-link").addEventListener("click", function(event) {
-                                    event.preventDefault(); // Menghentikan perilaku default dari link
-                                    
-                                    // Mengarahkan pengguna ke halaman 'my-account.html'
-                                    window.location.href = "my-account.html";
-                                });
-                            </script>
                         
                             <li><a href="https://maps.app.goo.gl/8ogHy2EzB8kRTwdw5"><i
                                         class="fas fa-location-arrow"></i>Lokasi</a></li>
@@ -140,8 +132,8 @@
                         <a href="#" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">Belanja</a>
                         <ul class="dropdown-menu">
                             <li><a href="shop.html">Sisi Belanja</a></li>
-                            <li><a href="cart.html">Pemesanan</a></li>
-                            <li><a href="wishlist.html">Keranjang Belanja</a></li>
+                            <li><a href="cart.html">Keranjang Belanja</a></li>
+                            <li><a href="wishlist.html">Daftar Favorit</a></li>
                             <li><a href="checkout.html">Pembayaran</a></li>
                             <li><a href="history.html">Riwayat Transaksi</a></li>
                         </ul>
@@ -230,9 +222,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> MAccessoris</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends
-                                to see any changes in performance over time.</p>
+                            <h1 class="m-b-20"><strong>Selamat Datang di <br> MAccessoris</strong></h1>
+                            <p class="m-b-40">Temukan aksesoris pilihan yang elegan, trendy, dan berkualitas <br> untuk
+                                melengkapi gaya kamu setiap hari.</p>
                             <p><a class="btn hvr-hover" href="shop.html">Pergi Belanja</a></p>
                         </div>
                     </div>
@@ -243,9 +235,9 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> MAccessoris</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends
-                                to see any changes in performance over time.</p>
+                            <h1 class="m-b-20"><strong>Selamat Datang di <br> MAccessoris</strong></h1>
+                            <p class="m-b-40">Temukan aksesoris pilihan yang elegan, trendy, dan berkualitas <br> untuk
+                                melengkapi gaya kamu setiap hari.</p>
                             <p><a class="btn hvr-hover" href="gallery.html">Lihat Katalog</a></p>
                         </div>
                     </div>
@@ -256,10 +248,10 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <h1 class="m-b-20"><strong>Welcome To <br> MAccessoris</strong></h1>
-                            <p class="m-b-40">See how your users experience your website in realtime or view <br> trends
-                                to see any changes in performance over time.</p>
-                            <p><a class="btn hvr-hover" href="shop-detail.html">Lihat Detail Produk</a></p>
+                            <h1 class="m-b-20"><strong>Selamat Datang di <br> MAccessoris</strong></h1>
+                            <p class="m-b-40">Temukan aksesoris pilihan yang elegan, trendy, dan berkualitas <br> untuk
+                                melengkapi gaya kamu setiap hari.</p>
+                            <p><a class="btn hvr-hover" href="shop-detail.html?id=bando-mutiara-polos">Lihat Detail Produk</a></p>
                         </div>
                     </div>
                 </div>
@@ -280,19 +272,19 @@
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="shop-cat-box">
                     <img class="img-fluid" src="images/categories_img_01.jpg" alt="Strap phone luxury" />
-                    <a class="btn hvr-hover" href="gallery.html">Strap phone luxury</a>
+                    <a class="btn hvr-hover" href="shop.html?category=strap">Strap phone luxury</a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="shop-cat-box">
                     <img class="img-fluid" src="images/categories_img_02.jpg" alt="Bross luxury" />
-                    <a class="btn hvr-hover" href="gallery.html">Bross luxury</a>
+                    <a class="btn hvr-hover" href="shop.html?category=bross">Bross luxury</a>
                 </div>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                 <div class="shop-cat-box">
                     <img class="img-fluid" src="images/categories_img_03.jpg" alt="Ring luxury" />
-                    <a class="btn hvr-hover" href="gallery.html">Ring luxury</a>
+                    <a class="btn hvr-hover" href="shop.html?category=ring">Ring luxury</a>
                 </div>
             </div>
         </div>
@@ -516,6 +508,11 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12 text-center mt-4">
+                    <a class="btn hvr-hover" href="shop.html">Lihat Semua Produk</a>
+                </div>
+            </div>
         </div>
     </div>
     <!-- End Products  -->
@@ -657,7 +654,7 @@
     <script src="js/jquery.superslides.min.js"></script>
     <script src="js/bootstrap-select.js"></script>
     <script src="js/inewsticker.js"></script>
-    <script src="js/bootsnav.js."></script>
+    <script src="js/bootsnav.js"></script>
     <script src="js/images-loded.min.js"></script>
     <script src="js/isotope.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
@@ -665,6 +662,7 @@
     <script src="js/form-validator.min.js"></script>
     <script src="js/contact-form-script.js"></script>
     <script src="js/custom.js"></script>
+    <script src="js/store.js"></script>
 </body>
 
 </html>

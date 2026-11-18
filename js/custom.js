@@ -191,6 +191,7 @@
 	   ................................................. */
 
 	$(function() {
+		if (!$.fn.slider || !$("#slider-range").length) return;
 		$("#slider-range").slider({
 			range: true,
 			min: 0,
@@ -208,9 +209,11 @@
 	   NiceScroll
 	   ................................................. */
 
-	$(".brand-box").niceScroll({
-		cursorcolor: "#9b9b9c",
-	});
+	if ($.fn.niceScroll && $(".brand-box").length) {
+		$(".brand-box").niceScroll({
+			cursorcolor: "#9b9b9c",
+		});
+	}
 	
 	
 }(jQuery));
